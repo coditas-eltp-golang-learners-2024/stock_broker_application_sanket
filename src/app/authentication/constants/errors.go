@@ -18,4 +18,8 @@ var (
 	ErrEmailExsits             = errors.New("err email already exsits")
 	ErrPanCardlExsits          = errors.New("err pancard already exsits")
 	ErrInsertingCustomerRecord = errors.New("error inserting customer record")
+	ErrCustomerNotFound        = errors.New("customer not found")
+	ErrQueryInDB               = errors.New("error querying database")
+	ErrEmail                   = errors.New("invalid email")
+	ErrPassword                = errors.New("invalid password")
 )

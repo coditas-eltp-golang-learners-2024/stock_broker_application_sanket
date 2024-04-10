@@ -59,7 +59,9 @@ func RegisterCustomer(c *gin.Context) {
 	// FinalCall to insert customer to database
 	err := service.CreateNewCustomer(customerRecords,c)
 	if err != nil {
-		log.Fatalf("%s: %s",constants.ErrInsertingCustomerRecord ,err)
+		log.Fatalf("%s: %s",constants.ErrInsertingCustomerRecord.Error() ,err)
 		return
 	}
 }
+
+
