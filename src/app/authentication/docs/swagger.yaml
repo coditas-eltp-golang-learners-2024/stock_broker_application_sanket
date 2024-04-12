@@ -1,0 +1,58 @@
+definitions:
+  models.Customer:
+    properties:
+      email:
+        example: john.doe@coditas.com
+        type: string
+      id:
+        type: integer
+      name:
+        example: John Doe
+        maxLength: 50
+        minLength: 3
+        type: string
+      pancard_number:
+        example: ABCDE1234F
+        type: string
+      password:
+        example: password
+        minLength: 8
+        type: string
+      phone_number:
+        example: 1234567890
+        type: integer
+    required:
+    - email
+    - name
+    - pancard_number
+    - password
+    - phone_number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: api for Stock Broker using gin and gorm
+  title: Stock Broker Application
+  version: "2.0"
+paths:
+  /customer-signup:
+    post:
+      consumes:
+      - application/json
+      description: Register a new customer and save their data in the database.
+      parameters:
+      - description: Customer data
+        in: body
+        name: customerRecords
+        required: true
+        schema:
+          $ref: '#/definitions/models.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Customer'
+      summary: Register a new customer
+swagger: "2.0"

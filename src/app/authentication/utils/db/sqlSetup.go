@@ -1,44 +1,33 @@
 package db
 
 import (
-	"database/sql"
-	"fmt"
-
 	"authentication/constants"
 	"authentication/utils"
+	"fmt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"log"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 // databases connection creation (mysql)
-func ConnectionWithDb() (*sql.DB, error) {
-
+func ConnectionWithDb() (*gorm.DB, error) {
 	// Parse Details from Yaml to struct
 	sqlCredentials := utils.ParseYAML()
-
 	DatabaseURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
 		sqlCredentials.DBUsername,
 		sqlCredentials.DBPassword,
 		sqlCredentials.DBHost,
 		sqlCredentials.DBPort,
 		sqlCredentials.DBName)
-
-	ConnectToDatabase, err := sql.Open("mysql", DatabaseURL)
-
+	ConnectToDatabase, err := gorm.Open(mysql.Open(DatabaseURL), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("%s: %s",constants.ErrOpenDatabaseConnection.Error() ,err)
-		return nil, err
+		log.Fatalf("%s: %s", constants.ErrOpenDatabaseConnection.Error(), err.Error())
 	}
-
 	// Ping connection (Status check)
-	err1 := ConnectToDatabase.Ping()
-
-	if err1 != nil {
-		log.Fatalf("%s: %s",constants.ErrDatabasePing,err)
+	sqlDB, _ := ConnectToDatabase.DB()
+	if sqlDB.Ping() != nil {
+		log.Fatalf("%s: %s", constants.ErrDatabasePing.Error(), err.Error())
 	}
-
 	fmt.Println("Connected to database!")
-
 	return ConnectToDatabase, nil
 }
