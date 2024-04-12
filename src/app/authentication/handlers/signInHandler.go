@@ -3,15 +3,13 @@ package handlers
 import (
 	"authentication/constants"
 	"authentication/models"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func CustomerAuthentication(c *gin.Context, isAuthorizedEmail func(email string) bool,
 	isAuthorizedPswd func(password string) bool,
 	isAuthorizedCustomer func(email, password string) (*models.Customer, bool)) {
-
 
 	var custCreds models.UserCredentials
 
@@ -33,7 +31,6 @@ func CustomerAuthentication(c *gin.Context, isAuthorizedEmail func(email string)
 	}
 
 	data, status := isAuthorizedCustomer(custCreds.Email, custCreds.Password)
-
 	if !status {
 		// Customer not found, return appropriate JSON response
 		c.JSON(http.StatusNotFound, gin.H{"error": constants.ErrCustomerNotFound.Error()})
