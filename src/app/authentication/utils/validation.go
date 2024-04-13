@@ -8,11 +8,9 @@ import (
 )
 
 var Validate *validator.Validate
-
 func init() {
 	Validate = validator.New()
 }
-
 
 func ValidateCustomer(customer models.Customer) error {
 	err := Validate.Struct(customer)
@@ -34,7 +32,7 @@ func ValidateCustomer(customer models.Customer) error {
 				return errors.New(constants.ErrInvalidPassword.Error())
 			}
 		}
-		return err // Returning nil here because all errors are handled
+		return err 
 	}
-	return nil // Returning nil when there are no validation errors
+	return nil 
 }

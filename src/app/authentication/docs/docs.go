@@ -53,9 +53,9 @@ const docTemplate = `{
             "required": [
                 "email",
                 "name",
-                "pancard_number",
+                "pancardNumber",
                 "password",
-                "phone_number"
+                "phoneNumber"
             ],
             "properties": {
                 "email": {
@@ -71,7 +71,7 @@ const docTemplate = `{
                     "minLength": 3,
                     "example": "John Doe"
                 },
-                "pancard_number": {
+                "pancardNumber": {
                     "type": "string",
                     "example": "ABCDE1234F"
                 },
@@ -80,7 +80,7 @@ const docTemplate = `{
                     "minLength": 8,
                     "example": "password"
                 },
-                "phone_number": {
+                "phoneNumber": {
                     "type": "integer",
                     "example": 1234567890
                 }

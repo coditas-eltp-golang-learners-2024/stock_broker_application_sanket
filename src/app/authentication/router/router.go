@@ -3,30 +3,28 @@ package router
 import (
 	"authentication/constants"
 	"authentication/handlers"
-	"authentication/repo"
+	"authentication/repository"
 	"authentication/service"
 	"authentication/utils/db"
-	"log"
-
 	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"log"
 )
 
 // router is created with gin
 func InitializeRouter() *gin.Engine {
 	userRouter := gin.New()
 	userRouter.Use(gin.Logger()) // LOG DETAILS ON CONSOLE
-	ConnectionWithDb , err := db.ConnectionWithDb()
+	ConnectionWithDb, err := db.ConnectionWithDb()
 	// checking err while connectingDB
 	if err != nil {
 		log.Fatalf("%s :%s", constants.ErrConnectingDB.Error(), err.Error())
 	}
-	userDatabaseRepo := repo.NewUserDBRepository(ConnectionWithDb )
+	userDatabaseRepo := repository.NewUserDBRepository(ConnectionWithDb)
 	userService := service.NewUserRepo(userDatabaseRepo)
 	userRouter.POST(constants.CustomerSignupEndpoint, handlers.RegisterCustomer(userService))
-	// swaggerAdded
-	userRouter.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	userRouter.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))		// swaggerAdded
 
 	// SignIn
 	// isAuthorizedEmail := service.IsAuthorizedEmail

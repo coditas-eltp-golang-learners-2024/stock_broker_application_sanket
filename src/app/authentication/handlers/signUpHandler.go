@@ -5,7 +5,6 @@ import (
 	"authentication/models"
 	"authentication/service"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,8 +19,6 @@ import (
 func RegisterCustomer(user *service.UserRepo) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var customerRecords models.Customer
-
-		// binding data into json
 		if err := c.ShouldBind(&customerRecords); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{constants.ErrGeneric.Error(): err.Error()})
 			return

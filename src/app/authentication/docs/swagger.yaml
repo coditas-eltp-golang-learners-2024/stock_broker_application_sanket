@@ -11,22 +11,22 @@ definitions:
         maxLength: 50
         minLength: 3
         type: string
-      pancard_number:
+      pancardNumber:
         example: ABCDE1234F
         type: string
       password:
         example: password
         minLength: 8
         type: string
-      phone_number:
+      phoneNumber:
         example: 1234567890
         type: integer
     required:
     - email
     - name
-    - pancard_number
+    - pancardNumber
     - password
-    - phone_number
+    - phoneNumber
     type: object
 host: localhost:8080
 info:

@@ -16,12 +16,10 @@ func ParseYAML() models.DbDetails {
 		log.Fatalf("%s: %s", constants.ErrReadConfigFile.Error(), err.Error())
 	}
 
-	// Unmarshal the configuration into a struct
-	var dbDetails models.DbDetails
+	var dbDetails models.DbDetails		// Unmarshal the configuration into a struct
 	if err := viper.UnmarshalKey("database", &dbDetails); err != nil {
 		log.Fatalf("%s: %s", constants.ErrDecodeConfig.Error(), err.Error())
 	}
+	return dbDetails	// Return the database details
 
-	// Return the database details
-	return dbDetails
 }
