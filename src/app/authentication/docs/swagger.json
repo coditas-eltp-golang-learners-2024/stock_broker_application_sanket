@@ -8,6 +8,52 @@
     },
     "host": "localhost:8080",
     "paths": {
+        "/customer-signin": {
+            "post": {
+                "description": "Signs in a user with provided credentials.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "User Sign In",
+                "parameters": [
+                    {
+                        "description": "Sign In Credentials",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.SignInCredentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User signed in successfully",
+                        "schema": {
+                            "$ref": "#/definitions/models.SignInCredentials"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/customer-signup": {
             "post": {
                 "description": "Register a new customer and save their data in the database.",
@@ -76,6 +122,19 @@
                 "phoneNumber": {
                     "type": "integer",
                     "example": 1234567890
+                }
+            }
+        },
+        "models.SignInCredentials": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john.doe@coditas.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "password"
                 }
             }
         }

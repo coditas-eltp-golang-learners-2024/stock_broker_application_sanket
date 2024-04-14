@@ -28,6 +28,15 @@ definitions:
     - password
     - phoneNumber
     type: object
+  models.SignInCredentials:
+    properties:
+      email:
+        example: john.doe@coditas.com
+        type: string
+      password:
+        example: password
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -35,6 +44,36 @@ info:
   title: Stock Broker Application
   version: "2.0"
 paths:
+  /customer-signin:
+    post:
+      consumes:
+      - application/json
+      description: Signs in a user with provided credentials.
+      parameters:
+      - description: Sign In Credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignInCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User signed in successfully
+          schema:
+            $ref: '#/definitions/models.SignInCredentials'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: User Sign In
+      tags:
+      - users
   /customer-signup:
     post:
       consumes:

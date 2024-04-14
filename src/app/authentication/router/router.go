@@ -22,22 +22,10 @@ func InitializeRouter() *gin.Engine {
 		log.Fatalf("%s :%s", constants.ErrConnectingDB.Error(), err.Error())
 	}
 	userDatabaseRepo := repository.NewUserDBRepository(ConnectionWithDb)
-	userService := service.NewUserRepo(userDatabaseRepo)
+	userService := service.NewUserRepo(userDatabaseRepo) //SignUp
 	userRouter.POST(constants.CustomerSignupEndpoint, handlers.RegisterCustomer(userService))
-	userRouter.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))		// swaggerAdded
-
-	// SignIn
-	// isAuthorizedEmail := service.IsAuthorizedEmail
-	// isAuthorizedPswd := service.IsAuthorizedPswd
-	// isAuthorizedCustomer := service.IsAuthorizedCustomer
-
-	// // Define your handler function with injected dependencies
-	// handler := func(c *gin.Context) {
-	// 	handlers.CustomerAuthentication(c, isAuthorizedEmail, isAuthorizedPswd, isAuthorizedCustomer)
-	// }
-
-	// // Register your handler with the router
-	// userRouter.POST(constants.CustomerSigninEndpoint, handler)
-
+	signInService := service.NewSignInChecker(userDatabaseRepo) //SingIn
+	userRouter.POST(constants.CustomerSigninEndpoint, handlers.UserSignInHandler(signInService))
+	userRouter.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // swaggerAdded
 	return userRouter
 }

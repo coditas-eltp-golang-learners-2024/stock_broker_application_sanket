@@ -10,7 +10,12 @@ type UserExistenceChecker interface {
 	IsPhoneNumberExists(phoneNumber uint64) bool
 	IsPancardNumberExists(pancardNumber string) bool
 	InsertCustomer(customer *models.Customer) bool
-}
+}	// SingUp
+
+type SignInCredentials interface {
+	CheckEmailExists(email string) bool
+	CheckPasswordExists(password string) bool
+}	//SignIn
 
 type UserDBRepository struct {
 	db *gorm.DB
@@ -50,4 +55,20 @@ func (userRepository *UserDBRepository) InsertCustomer(customerData *models.Cust
 		return false
 	}
 	return true
+}
+
+func (userRepository *UserDBRepository) CheckEmailExists(email string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.SignInCredentials{}).Where("email = ?", email).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) CheckPasswordExists(password string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.SignInCredentials{}).Where("password = ?", password).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
 }
