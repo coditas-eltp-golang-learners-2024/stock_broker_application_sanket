@@ -17,11 +17,8 @@ func NewSignInChecker(check repository.SignInCredentials) *SignInChecker {
 }
 
 func (signInUser *SignInChecker) SignIn(userCredentials models.SignInCredentials) error {
-	if !signInUser.credentials.CheckEmailExists(userCredentials.Email) {
-		return constants.ErrEmailNotExists
-	}
-	if !signInUser.credentials.CheckPasswordExists(userCredentials.Password) {
-		return constants.ErrPasswordNotExists
+	if !signInUser.credentials.CheckPasswordExists(userCredentials.Email,userCredentials.Password) {
+		return constants.ErrSignIn
 	}
 	return nil
 }
