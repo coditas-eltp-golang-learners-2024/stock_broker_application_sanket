@@ -2,6 +2,8 @@ package repository
 
 import (
 	"authentication/models"
+	"time"
+
 	"gorm.io/gorm"
 )
 
@@ -15,6 +17,12 @@ type UserExistenceChecker interface {
 type SignInCredentials interface {
 	CheckPasswordExists(email, password string) bool
 } //SignIn
+
+type OtpVerification interface {
+	CheckEmailExists(email string) bool
+	NewRecordInsert(email, otp string, otp_expiry time.Time) bool
+	CheckOtp(email string, otp string) bool
+} //OtpVerification
 
 type UserDBRepository struct {
 	db *gorm.DB
@@ -61,6 +69,41 @@ func (userRepository *UserDBRepository) CheckPasswordExists(email, password stri
 	if err := userRepository.db.Model(&models.SignInCredentials{}).
 		Where("email = ? AND password = ?", email, password).
 		Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) CheckEmailExists(email string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.User{}).Where("email = ?", email).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) NewRecordInsert(email, otp string, otpExpiry time.Time) bool {
+	var count int64
+
+	// Truncate milliseconds from otpExpiry
+	otpExpiry = otpExpiry.Truncate(time.Second)
+	currentTime := time.Now()
+	if otpExpiry.Sub(currentTime) <= time.Minute {
+		if err := userRepository.db.Model(&models.User{}).Where("email = ?", email).Updates(models.User{OTP: otp, Otp_expiry: otpExpiry}).Count(&count).Error; err != nil {
+			return false
+		}
+	}
+
+	// Update existing record with new OTP and OTP expiry
+	// if err := userRepository.db.Model(&models.User{}).Where("email = ?", email).Updates(models.User{OTP: otp, Otp_expiry: otpExpiry}).Count(&count).Error; err != nil {
+	// 	return false
+	// }
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) CheckOtp(email, otp string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.User{}).Where("otp = AND email?", otp, email).Count(&count).Error; err != nil {
 		return false
 	}
 	return count > 0
