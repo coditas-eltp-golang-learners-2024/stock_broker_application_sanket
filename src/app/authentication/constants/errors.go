@@ -25,4 +25,7 @@ var (
 	ErrQueryInDB               = errors.New("error querying database")
 	ErrEmail                   = errors.New("invalid email")
 	ErrPassword                = errors.New("invalid password")
+	ErrPasswordNotExists       = errors.New("password does not exist")
+	ErrEmailNotExists          = errors.New("email does not exist")
+	ErrSignIn                  = errors.New("unable to signin")
 )

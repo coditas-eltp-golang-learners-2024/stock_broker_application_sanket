@@ -1,6 +1,6 @@
 database:
-  DBUsername: "root"
-  DBPassword: "S@nket123"
-  DBName: "customer_database"
-  DBHost: "localhost"
-  DBPort: "3306"
+  dbUsername: "root"
+  dbPassword: "S@nket123"
+  dbName: "customer_database"
+  dbHost: "localhost"
+  dbPort: "3306"
