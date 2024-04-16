@@ -4,7 +4,7 @@ package models
 type Customer struct {
 	ID            uint   `gorm:"primaryKey" json:"id"`
 	Name          string `gorm:"column:name;index" json:"name" validate:"required,min=3,max=50" example:"John Doe"`
-	Email         string `gorm:"column:email;uniqueIndex" json:"email" validate:"required,email,contains=@coditas.com" example:"john.doe@coditas.com"`
+	Email         string `gorm:"column:email;uniqueIndex" json:"email" validate:"required,email" example:"john.doe@gmail.com"`
 	PhoneNumber   uint64 `gorm:"column:phone_number;uniqueIndex" json:"phoneNumber" validate:"required,lt=10000000000,gt=999999999" example:"1234567890"`
 	PancardNumber string `gorm:"column:pancard_number;uniqueIndex" json:"pancardNumber" validate:"required,len=10" example:"ABCDE1234F"`
 	Password      string `gorm:"column:password" json:"password" validate:"required,min=8" example:"password"`

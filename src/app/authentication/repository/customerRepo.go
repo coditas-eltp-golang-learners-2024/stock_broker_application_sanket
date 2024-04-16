@@ -13,7 +13,7 @@ type UserExistenceChecker interface {
 } // SingUp
 
 type SignInCredentials interface {
-	CheckPasswordExists(email, password string) bool
+	CheckCredentialsExist(email, password string) bool
 } //SignIn
 
 type UserDBRepository struct {
@@ -56,7 +56,7 @@ func (userRepository *UserDBRepository) InsertCustomer(customerData *models.Cust
 	return true
 }
 
-func (userRepository *UserDBRepository) CheckPasswordExists(email, password string) bool {
+func (userRepository *UserDBRepository) CheckCredentialsExist(email, password string) bool {
 	var count int64
 	if err := userRepository.db.Model(&models.SignInCredentials{}).
 		Where("email = ? AND password = ?", email, password).

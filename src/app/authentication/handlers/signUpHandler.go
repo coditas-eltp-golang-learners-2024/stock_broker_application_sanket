@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RegisterCustomer godoc
 // @Summary Register a new customer
 // @Description Register a new customer and save their data in the database.
 // @Accept json

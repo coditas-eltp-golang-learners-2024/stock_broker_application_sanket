@@ -36,3 +36,22 @@ func ValidateCustomer(customer models.Customer) error {
 	}
 	return nil 
 }
+
+func ValidateSignIn(customer models.SignInCredentials) error {
+	err := Validate.Struct(customer)
+	if err != nil {
+		validationErrors, _ := err.(validator.ValidationErrors)
+
+		for _, fieldError := range validationErrors {
+			structFieldName := fieldError.Field()
+			switch structFieldName {
+			case "Email":
+				return errors.New(constants.ErrInvalidEmail.Error())
+			case "Password":
+				return errors.New(constants.ErrInvalidPassword.Error())
+			}
+		}
+		return err 
+	}
+	return nil 
+}

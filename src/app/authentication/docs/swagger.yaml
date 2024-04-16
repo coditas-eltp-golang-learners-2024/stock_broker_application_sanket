@@ -2,7 +2,7 @@ definitions:
   models.Customer:
     properties:
       email:
-        example: john.doe@coditas.com
+        example: john.doe@gmail.com
         type: string
       id:
         type: integer
@@ -31,11 +31,15 @@ definitions:
   models.SignInCredentials:
     properties:
       email:
-        example: john.doe@coditas.com
+        example: john.doe@gmail.com
         type: string
       password:
         example: password
+        minLength: 8
         type: string
+    required:
+    - email
+    - password
     type: object
 host: localhost:8080
 info:
