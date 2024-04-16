@@ -106,7 +106,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "john.doe@coditas.com"
+                    "example": "john.doe@gmail.com"
                 },
                 "id": {
                     "type": "integer"
@@ -134,13 +134,18 @@ const docTemplate = `{
         },
         "models.SignInCredentials": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "john.doe@coditas.com"
+                    "example": "john.doe@gmail.com"
                 },
                 "password": {
                     "type": "string",
+                    "minLength": 8,
                     "example": "password"
                 }
             }
