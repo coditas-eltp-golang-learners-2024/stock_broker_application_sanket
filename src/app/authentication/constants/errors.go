@@ -7,7 +7,7 @@ var (
 	ErrGeneric                 = errors.New("error")
 	ErrInvalidName             = errors.New("name is invalid")
 	ErrInvalidPhoneNumber      = errors.New("phone number is invalid")
-	ErrInvalidEmail            = errors.New("email is invalid or does not belong to the @coditas.com domain")
+	ErrInvalidEmail            = errors.New("email is invalid")
 	ErrInvalidPanCard          = errors.New("invalid PanCard")
 	ErrInvalidPassword         = errors.New("password is weak")
 	ErrConnectingDB            = errors.New("error while connecting db")
