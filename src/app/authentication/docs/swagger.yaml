@@ -2,7 +2,7 @@ definitions:
   models.Customer:
     properties:
       email:
-        example: john.doe@coditas.com
+        example: john.doe@gmail.com
         type: string
       id:
         type: integer

@@ -60,7 +60,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "john.doe@coditas.com"
+                    "example": "john.doe@gmail.com"
                 },
                 "id": {
                     "type": "integer"
