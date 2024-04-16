@@ -1,1 +1,6 @@
-package resources
+database:
+  DBUsername: "root"
+  DBPassword: "S@nket123"
+  DBName: "customer_database"
+  DBHost: "localhost"
+  DBPort: "3306"

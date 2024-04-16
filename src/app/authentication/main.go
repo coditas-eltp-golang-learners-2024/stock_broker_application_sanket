@@ -1,14 +1,17 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	_ "authentication/docs"
+	"authentication/router"
+	"fmt"
 )
 
+// @title Stock Broker Application
+// @description   api for Stock Broker using gin and gorm
+// @version 2.0
+// @host localhost:8080
 func main() {
-
-	router:=gin.New()
-
-	router.Use(gin.Logger())
-
-	router.Run(":9091")
+	apiRouter := router.InitializeRouter()	// router initialize on port 8080
+	fmt.Println("The Connection is open at port-8080")
+	apiRouter.Run(":8080")
 }

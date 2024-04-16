@@ -1,0 +1,83 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "api for Stock Broker using gin and gorm",
+        "title": "Stock Broker Application",
+        "contact": {},
+        "version": "2.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/customer-signup": {
+            "post": {
+                "description": "Register a new customer and save their data in the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Register a new customer",
+                "parameters": [
+                    {
+                        "description": "Customer data",
+                        "name": "customerRecords",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Customer"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Customer": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "pancardNumber",
+                "password",
+                "phoneNumber"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john.doe@gmail.com"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3,
+                    "example": "John Doe"
+                },
+                "pancardNumber": {
+                    "type": "string",
+                    "example": "ABCDE1234F"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password"
+                },
+                "phoneNumber": {
+                    "type": "integer",
+                    "example": 1234567890
+                }
+            }
+        }
+    }
+}
