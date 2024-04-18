@@ -4,6 +4,8 @@ import (
 	"authentication/constants"
 	"authentication/models"
 	"authentication/repository"
+	"math/rand"
+	"time"
 )
 
 type SignInChecker struct {
@@ -17,7 +19,7 @@ func NewSignInChecker(check repository.SignInCredentials) *SignInChecker {
 }
 
 func (signInUser *SignInChecker) SignIn(userCredentials models.SignInCredentials) error {
-	if !signInUser.credentials.CheckPasswordExists(userCredentials.Email,userCredentials.Password) {
+	if !signInUser.credentials.CheckCredentialsExist(userCredentials.Email, userCredentials.Password) {
 		return constants.ErrSignIn
 	}
 	otp, creationTime := generateOTP()
@@ -27,12 +29,9 @@ func (signInUser *SignInChecker) SignIn(userCredentials models.SignInCredentials
 	return nil
 }
 
-func generateOTP() (string, time.Time) {
-	creationTime := time.Now().Add(time.Minute * constants.ExpiryMins)
-	otp := ""
-	for digitIndex := 0; digitIndex < constants.OtpLength; digitIndex++ {
-		randomNumber, _ := rand.Int(rand.Reader, big.NewInt(10))
-		otp += randomNumber.String()
-	}
+func generateOTP() (int, time.Time) {
+	creationTime := time.Now().Add(time.Minute)
+	rand.Seed(time.Now().UnixNano())
+	otp := rand.Intn(10000)
 	return otp, creationTime
 }

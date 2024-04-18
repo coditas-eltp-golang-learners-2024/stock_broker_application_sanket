@@ -4,6 +4,7 @@ import (
 	"authentication/models"
 	"time"
 
+	"github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -16,11 +17,11 @@ type UserExistenceChecker interface {
 
 type SignInCredentials interface {
 	CheckCredentialsExist(email, password string) bool
-	AssignOtpToEmail(email, otp string, creatime time.Time) bool
+	AssignOtpToEmail(email string, otp int, creatime time.Time) bool
 } //SignIn
 
 type OtpVerification interface {
-	CheckOtp(email, otp string) bool
+	CheckOtp(email string, otp int) bool
 } //OtpVerification
 
 type UserDBRepository struct {
@@ -41,7 +42,7 @@ func (userRepository *UserDBRepository) IsEmailExists(email string) bool {
 
 func (userRepository *UserDBRepository) IsPhoneNumberExists(phoneNumber uint64) bool {
 	var count int64
-	if err := userRepository.db.Model(&models.Customer{}).Where("phone_number = ?", phoneNumber).Count(&count).Error; err != nil {
+	if err := userRepository.db.Model(&models.Customer{}).Where("phoneNumber = ?", phoneNumber).Count(&count).Error; err != nil {
 		return false
 	}
 	return count > 0
@@ -49,7 +50,7 @@ func (userRepository *UserDBRepository) IsPhoneNumberExists(phoneNumber uint64) 
 
 func (userRepository *UserDBRepository) IsPancardNumberExists(pancardNumber string) bool {
 	var count int64
-	if err := userRepository.db.Model(&models.Customer{}).Where("pancard_number = ?", pancardNumber).Count(&count).Error; err != nil {
+	if err := userRepository.db.Model(&models.Customer{}).Where("pancard = ?", pancardNumber).Count(&count).Error; err != nil {
 		return false
 	}
 	return count > 0
@@ -73,7 +74,7 @@ func (userRepository *UserDBRepository) CheckCredentialsExist(email, password st
 	return count > 0
 }
 
-func (userRepository *UserDBRepository) AssignOtpToEmail(email string, otp string, creationTime time.Time) bool {
+func (userRepository *UserDBRepository) AssignOtpToEmail(email string, otp int, creationTime time.Time) bool {
 	var count int64
 	// Truncate milliseconds from otpExpiry
 	creationTime = creationTime.Truncate(time.Second)
@@ -83,8 +84,19 @@ func (userRepository *UserDBRepository) AssignOtpToEmail(email string, otp strin
 	return count > 0
 }
 
-func (userRepository *UserDBRepository) CheckOtp(email, otp string) bool {
+func (userRepository *UserDBRepository) CheckOtp(email string, otp int) bool {
 	var count int64
+	var otpCreationTime mysql.NullTime
+	err := userRepository.db.Table("users").Select("createdAt").Where("email = ?", email).Scan(&otpCreationTime).Error
+	if err != nil {
+		return false
+	}
+	if otpCreationTime.Valid {
+		duration := time.Since(otpCreationTime.Time)
+		if duration > 1*time.Minute {
+			return false 
+		}
+	}
 	if err := userRepository.db.Model(&models.User{}).Where("email=? AND otp =?", email, otp).Count(&count).Error; err != nil {
 		return false
 	}

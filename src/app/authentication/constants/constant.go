@@ -6,8 +6,3 @@ const (
 	StatusKey            = "status"
 	SignInSuccessMessage = "Sign-in successful"
 )
-
-const (
-	OtpLength  = 4
-	ExpiryMins = 1
-)
