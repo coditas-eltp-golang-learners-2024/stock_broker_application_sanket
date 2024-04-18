@@ -6,5 +6,5 @@ type SignInCredentials struct {
 }
 
 func (SignInCredentials) TableName() string {
-	return "customerdata"
+	return "users"
 }

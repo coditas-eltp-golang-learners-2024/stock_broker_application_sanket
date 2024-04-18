@@ -15,6 +15,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/customer-otpvalidate": {
+            "post": {
+                "description": "Validates the OTP for the user provided in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Validate OTP for user",
+                "parameters": [
+                    {
+                        "description": "User data including OTP for validation",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OTP validation successful",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "OTP validation failed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/customer-signin": {
             "post": {
                 "description": "Signs in a user with provided credentials.",
@@ -99,7 +145,7 @@ const docTemplate = `{
             "required": [
                 "email",
                 "name",
-                "pancardNumber",
+                "pancard",
                 "password",
                 "phoneNumber"
             ],
@@ -117,7 +163,7 @@ const docTemplate = `{
                     "minLength": 3,
                     "example": "John Doe"
                 },
-                "pancardNumber": {
+                "pancard": {
                     "type": "string",
                     "example": "ABCDE1234F"
                 },
@@ -147,6 +193,27 @@ const docTemplate = `{
                     "type": "string",
                     "minLength": 8,
                     "example": "password"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "required": [
+                "email",
+                "otp"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-04-17 07:39:20"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "sanket@gmail.com"
+                },
+                "otp": {
+                    "type": "integer",
+                    "example": 8393
                 }
             }
         }

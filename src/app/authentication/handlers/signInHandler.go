@@ -30,6 +30,6 @@ func UserSignInHandler(user *service.SignInChecker) gin.HandlerFunc {
 			ctx.JSON(http.StatusInternalServerError, gin.H{constants.ErrGeneric.Error(): err.Error()})
 			return
 		}
-		ctx.JSON(http.StatusOK,signInData)
+		ctx.JSON(http.StatusOK,gin.H{constants.Otp:constants.OtpMessage})
 	}
 }

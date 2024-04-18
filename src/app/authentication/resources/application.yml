@@ -1,6 +1,6 @@
 database:
-  dbUsername: "root"
-  dbPassword: "S@nket123"
-  dbName: "customer_database"
-  dbHost: "localhost"
+  dbUsername: "admin"
+  dbPassword: "admincoditas"
+  dbName: "eltp-database"
+  dbHost: "eltpdatabase.criiey6s64bu.eu-north-1.rds.amazonaws.com"
   dbPort: "3306"
