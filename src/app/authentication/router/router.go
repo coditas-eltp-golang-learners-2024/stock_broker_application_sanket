@@ -28,6 +28,8 @@ func InitializeRouter() *gin.Engine {
 	userRouter.POST(constants.CustomerSigninEndpoint, handlers.UserSignInHandler(signInService))
 	otpSerive := service.NewOtpVerificationService(userDatabaseRepo)
 	userRouter.POST(constants.CustomerOtpSigninEndpoint, handlers.ValidateOtp(otpSerive))
+	passwordService := service.NewRestPasswordService(userDatabaseRepo)
+	userRouter.PATCH(constants.CustomerchangepasswordEndpoint, handlers.AuthMiddleware(), handlers.HandleChangePassword(passwordService))
 	userRouter.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler)) // swaggerAdded
 	return userRouter
 }

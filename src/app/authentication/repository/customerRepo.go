@@ -2,10 +2,9 @@ package repository
 
 import (
 	"authentication/models"
-	"time"
-
 	"github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
+	"time"
 )
 
 type UserExistenceChecker interface {
@@ -24,6 +23,10 @@ type OtpVerification interface {
 	CheckOtp(email string, otp int) bool
 } //OtpVerification
 
+type AuthenticationProvider interface {
+	CheckEmailAndPassword(email, password string) bool
+	SetNewPassword(email, newPassword string) bool
+}
 type UserDBRepository struct {
 	db *gorm.DB
 }
@@ -94,10 +97,26 @@ func (userRepository *UserDBRepository) CheckOtp(email string, otp int) bool {
 	if otpCreationTime.Valid {
 		duration := time.Since(otpCreationTime.Time)
 		if duration > 1*time.Minute {
-			return false 
+			return false
 		}
 	}
 	if err := userRepository.db.Model(&models.User{}).Where("email=? AND otp =?", email, otp).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) CheckEmailAndPassword(email, password string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.ChangePassword{}).Where("email = ? AND password = ?", email, password).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) SetNewPassword(email, newPassword string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.ChangePassword{}).Where("email = ?", email).Update("password", newPassword).Count(&count).Error; err != nil {
 		return false
 	}
 	return count > 0

@@ -15,6 +15,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/customer-changepassword": {
+            "patch": {
+                "description": "Change a user's password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Change Password",
+                "parameters": [
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ChangePassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/customer-otpvalidate": {
             "post": {
                 "description": "Validates the OTP for the user provided in the request body.",
@@ -140,6 +186,30 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.ChangePassword": {
+            "type": "object",
+            "required": [
+                "email",
+                "newPassword",
+                "oldPassword"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john.doe@gmail.com"
+                },
+                "newPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "newPassword"
+                },
+                "oldPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password"
+                }
+            }
+        },
         "models.Customer": {
             "type": "object",
             "required": [
