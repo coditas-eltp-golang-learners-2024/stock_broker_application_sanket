@@ -21,6 +21,7 @@ type SignInCredentials interface {
 
 type OtpVerification interface {
 	CheckOtp(email string, otp int) bool
+	AddJWTTokenToDB(token, email string) bool
 } //OtpVerification
 
 type AuthenticationProvider interface {
@@ -101,6 +102,14 @@ func (userRepository *UserDBRepository) CheckOtp(email string, otp int) bool {
 		}
 	}
 	if err := userRepository.db.Model(&models.User{}).Where("email=? AND otp =?", email, otp).Count(&count).Error; err != nil {
+		return false
+	}
+	return count > 0
+}
+
+func (userRepository *UserDBRepository) AddJWTTokenToDB(token, email string) bool {
+	var count int64
+	if err := userRepository.db.Model(&models.Claim{}).Where("email = ?", email).Updates(models.Claim{Email: email, Token: token}).Count(&count).Error; err != nil {
 		return false
 	}
 	return count > 0

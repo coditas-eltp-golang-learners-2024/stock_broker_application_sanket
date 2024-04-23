@@ -7,3 +7,4 @@ type DbDetails struct {
 	DBHost     string `yaml:"dbhost"`
 	DBPort     string `yaml:"dbport"`
 }
+

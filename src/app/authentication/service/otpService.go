@@ -17,10 +17,16 @@ func NewOtpVerificationService(otpVerificationRepo repository.OtpVerification) *
 }
 
 func (otpService *OtpVerificationService) OtpVerification(otpData models.User) error {
-	if !otpService.otpVerification.CheckOtp(otpData.Email,otpData.OTP) {
+	if !otpService.otpVerification.CheckOtp(otpData.Email, otpData.OTP) {
 		return constants.ErrOtpVerification
 	}
+	Token, err := GenerateToken(otpData.Email)
+	if err != nil {
+		return constants.ErrTokenGenerationErrorMessage
+	}
+	if !otpService.otpVerification.AddJWTTokenToDB(Token,otpData.Email){
+		return constants.ErrTokenFailedToInsertIntoDB
+	}
+
 	return nil
 }
-
-

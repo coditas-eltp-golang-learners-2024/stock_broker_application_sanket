@@ -4,8 +4,8 @@ import (
 	"authentication/constants"
 	"authentication/models"
 	"authentication/service"
-	"net/http"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // @Summary Validate OTP for user
@@ -30,11 +30,5 @@ func ValidateOtp(user *service.OtpVerificationService) gin.HandlerFunc {
 			return
 		}
 		ctx.JSON(http.StatusOK, gin.H{constants.StatusKey: constants.SignInSuccessMessage})
-		token, err := service.GenerateToken(userData.Email)
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-			return
-		}
-		ctx.JSON(http.StatusOK, gin.H{"token": token})
 	}
 }

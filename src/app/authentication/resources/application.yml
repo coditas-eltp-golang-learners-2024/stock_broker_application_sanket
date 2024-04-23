@@ -1,6 +1,6 @@
 database:
-  dbUsername: "admin"
-  dbPassword: "admincoditas"
+  dbUsername: "eltp"
+  dbPassword: "Coditas@123"
   dbName: "eltp-database"
-  dbHost: "eltpdatabase.criiey6s64bu.eu-north-1.rds.amazonaws.com"
+  dbHost: "eltp.mysql.database.azure.com"
   dbPort: "3306"

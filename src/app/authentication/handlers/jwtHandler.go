@@ -9,18 +9,16 @@ import (
 	"strings"
 )
 
-// @Summary JWT Authentication Middleware
-// @Description Authenticate incoming requests using JSON Web Tokens (JWT)
-// @ID jwt-auth-middleware
+// @Summary Authenticate requests using JWT token
+// @Description Authenticate requests using JWT token
+// @ID auth-middleware
 // @Produce json
-// @Security ApiKeyAuth
-// @SecurityDefinitions ApiKeyAuth ApiKeyAuth
-// @In header
-// @Name Authorization
-// @Description JWT authorization header
-// @Success 200 {object} string "Authentication successful"
+// @Success 200 {object} string "Token is valid"
 // @Failure 401 {object} string "Unauthorized: missing or invalid token"
-// @Router /customer-changepassword [patch]
+// @securityDefinitions.apiKey token
+// @in header
+// @name Authorization
+// @Security JWT
 func AuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		tokenString := ctx.GetHeader("Authorization")
