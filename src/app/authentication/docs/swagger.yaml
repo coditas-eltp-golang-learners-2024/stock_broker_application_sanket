@@ -1,4 +1,22 @@
 definitions:
+  models.ChangePassword:
+    properties:
+      email:
+        example: john.doe@gmail.com
+        type: string
+      newPassword:
+        example: newPassword
+        minLength: 8
+        type: string
+      oldPassword:
+        example: password
+        minLength: 8
+        type: string
+    required:
+    - email
+    - newPassword
+    - oldPassword
+    type: object
   models.Customer:
     properties:
       email:
@@ -11,7 +29,7 @@ definitions:
         maxLength: 50
         minLength: 3
         type: string
-      pancardNumber:
+      pancard:
         example: ABCDE1234F
         type: string
       password:
@@ -24,7 +42,7 @@ definitions:
     required:
     - email
     - name
-    - pancardNumber
+    - pancard
     - password
     - phoneNumber
     type: object
@@ -41,6 +59,21 @@ definitions:
     - email
     - password
     type: object
+  models.User:
+    properties:
+      createdAt:
+        example: "2024-04-17 07:39:20"
+        type: string
+      email:
+        example: sanket@gmail.com
+        type: string
+      otp:
+        example: 8393
+        type: integer
+    required:
+    - email
+    - otp
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -48,6 +81,66 @@ info:
   title: Stock Broker Application
   version: "2.0"
 paths:
+  /customer-changepassword:
+    patch:
+      consumes:
+      - application/json
+      description: Change a user's password
+      parameters:
+      - description: Change Password Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ChangePassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Change Password
+      tags:
+      - Authentication
+  /customer-otpvalidate:
+    post:
+      consumes:
+      - application/json
+      description: Validates the OTP for the user provided in the request body.
+      parameters:
+      - description: User data including OTP for validation
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OTP validation successful
+          schema:
+            type: string
+        "400":
+          description: Invalid request
+          schema:
+            type: string
+        "401":
+          description: OTP validation failed
+          schema:
+            type: string
+      summary: Validate OTP for user
+      tags:
+      - Authentication
   /customer-signin:
     post:
       consumes:
@@ -98,4 +191,9 @@ paths:
           schema:
             $ref: '#/definitions/models.Customer'
       summary: Register a new customer
+securityDefinitions:
+  JWT:
+    in: header
+    name: token
+    type: apiKey
 swagger: "2.0"

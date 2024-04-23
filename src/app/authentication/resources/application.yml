@@ -1,6 +1,6 @@
 database:
-  dbUsername: "root"
-  dbPassword: "S@nket123"
-  dbName: "customer_database"
-  dbHost: "localhost"
+  dbUsername: "eltp"
+  dbPassword: "Coditas@123"
+  dbName: "eltp-database"
+  dbHost: "eltp.mysql.database.azure.com"
   dbPort: "3306"

@@ -8,6 +8,7 @@ import (
 )
 
 var Validate *validator.Validate
+
 func init() {
 	Validate = validator.New()
 }
@@ -32,9 +33,9 @@ func ValidateCustomer(customer models.Customer) error {
 				return errors.New(constants.ErrInvalidPassword.Error())
 			}
 		}
-		return err 
+		return err
 	}
-	return nil 
+	return nil
 }
 
 func ValidateSignIn(customer models.SignInCredentials) error {
@@ -51,7 +52,28 @@ func ValidateSignIn(customer models.SignInCredentials) error {
 				return errors.New(constants.ErrInvalidPassword.Error())
 			}
 		}
-		return err 
+		return err
 	}
-	return nil 
+	return nil
+}
+
+func ValidateOtpChange(customer models.ChangePassword) error {
+	err := Validate.Struct(customer)
+	if err != nil {
+		validationErrors, _ := err.(validator.ValidationErrors)
+
+		for _, fieldError := range validationErrors {
+			structFieldName := fieldError.Field()
+			switch structFieldName {
+			case "Email":
+				return errors.New(constants.ErrInvalidEmail.Error())
+			case "OldPassword":
+				return errors.New(constants.ErrInvalidPassword.Error())
+			case "NewPassword":
+				return errors.New(constants.ErrInvalidPassword.Error())
+			}
+		}
+		return err
+	}
+	return nil
 }

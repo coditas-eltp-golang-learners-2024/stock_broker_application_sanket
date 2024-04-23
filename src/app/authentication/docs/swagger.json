@@ -8,6 +8,98 @@
     },
     "host": "localhost:8080",
     "paths": {
+        "/customer-changepassword": {
+            "patch": {
+                "description": "Change a user's password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Change Password",
+                "parameters": [
+                    {
+                        "description": "Change Password Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ChangePassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/customer-otpvalidate": {
+            "post": {
+                "description": "Validates the OTP for the user provided in the request body.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Validate OTP for user",
+                "parameters": [
+                    {
+                        "description": "User data including OTP for validation",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OTP validation successful",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "OTP validation failed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/customer-signin": {
             "post": {
                 "description": "Signs in a user with provided credentials.",
@@ -87,12 +179,36 @@
         }
     },
     "definitions": {
+        "models.ChangePassword": {
+            "type": "object",
+            "required": [
+                "email",
+                "newPassword",
+                "oldPassword"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "john.doe@gmail.com"
+                },
+                "newPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "newPassword"
+                },
+                "oldPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password"
+                }
+            }
+        },
         "models.Customer": {
             "type": "object",
             "required": [
                 "email",
                 "name",
-                "pancardNumber",
+                "pancard",
                 "password",
                 "phoneNumber"
             ],
@@ -110,7 +226,7 @@
                     "minLength": 3,
                     "example": "John Doe"
                 },
-                "pancardNumber": {
+                "pancard": {
                     "type": "string",
                     "example": "ABCDE1234F"
                 },
@@ -142,6 +258,34 @@
                     "example": "password"
                 }
             }
+        },
+        "models.User": {
+            "type": "object",
+            "required": [
+                "email",
+                "otp"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2024-04-17 07:39:20"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "sanket@gmail.com"
+                },
+                "otp": {
+                    "type": "integer",
+                    "example": 8393
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "token",
+            "in": "header"
         }
     }
 }
